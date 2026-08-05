@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Ulang Tahun - Galaxy Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            width: 90%;
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f;
+            animation: pulse 2s infinite alternate;
+        }
+
+        p {
+            color: #00ffff;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.98);
+                text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+            }
+            100% {
+                transform: scale(1.02);
+                text-shadow: 0 0 20px #9d00ff, 0 0 40px #9d00ff, 0 0 60px #00ffff;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="container">
+        <h1>Selamat Ulang Tahun!</h1>
+        <p>Semoga Hari-Harimu Penuh Keberuntungan di Seluruh Galaksi</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Karakter Matrix bercampur simbol sci-fi galaksi
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%" + "ΩΨΦΞ★☄🛸🌌";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+
+        // Warna tema galaksi (Ungu, Biru Muda, Merah Muda, Putih)
+        const galaxyColors = ['#ff007f', '#9d00ff', '#00ffff', '#ffffff', '#7000ff'];
+
+        function draw() {
+            // Efek trail hitam transparan untuk ilusi pergerakan
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                // Pilih karakter acak
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                
+                // Pilih warna acak dari palet galaksi
+                ctx.fillStyle = galaxyColors[Math.floor(Math.random() * galaxyColors.length)];
+                
+                // Gambar teks
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                // Reset jika sudah mencapai bawah layar secara acak
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+
+        setInterval(draw, 30);
+    </script>
+</body>
+</html>
